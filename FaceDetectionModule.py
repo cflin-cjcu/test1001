@@ -47,7 +47,8 @@ class FaceDetector:
                 ih, iw, ic = img.shape
                 bbox = int(bboxC.xmin * iw), int(bboxC.ymin * ih), \
                     int(bboxC.width * iw), int(bboxC.height * ih)
-                kp1 = [int(k1.x * iw), int(k1.y * ih)]
+                px = int(k1.x * iw)
+                py = int(k1.y * ih)
                 cx, cy = bbox[0] + (bbox[2] // 2), \
                     bbox[1] + (bbox[3] // 2)
                 bboxInfo = {"id": id, "bbox": bbox,
@@ -56,10 +57,10 @@ class FaceDetector:
                 if draw:
                     img = cv2.rectangle(img, bbox, (255, 255, 0), 2)
                     # img = cv2.circle(img, kp1, 5, (255, 255, 0), cv2.FILLED)
-                    img = cvzone.overlayPNG(img, heartimg, kp1)
-                    cv2.putText(img, f'{int(detection.score[0] * 100)}%',
-                                (bbox[0], bbox[1] - 20), cv2.FONT_HERSHEY_PLAIN,
-                                2, (255, 0, 255), 2)
+                    img = cvzone.overlayPNG(img, heartimg, [px, py])
+                    # cv2.putText(img, f'{int(detection.score[0] * 100)}%',
+                    #             (bbox[0], bbox[1] - 20), cv2.FONT_HERSHEY_PLAIN,
+                    #             2, (255, 0, 255), 2)
         return img, bboxs
 
 

@@ -6,14 +6,14 @@ url = "https://www.youtube.com/watch?v=skgh3juWdFU"
 
 videoPafy = pafy.new(url)
 best = videoPafy.getbest()
-# cap = cv2.VideoCapture(0)
-cap = cv2.VideoCapture(best.url)
+cap = cv2.VideoCapture(0)
+# cap = cv2.VideoCapture(best.url)
 
-detector = FaceDetector(model_selection=1)
+detector = FaceDetector(model_selection=0)
 
 while True:
-    success, img = cap.read()
-    # img = cv2.imread('./image/test2.jpg')
+    # success, img = cap.read()
+    img = cv2.imread('./image/test1.jpg', cv2.IMREAD_UNCHANGED)
     img, bboxs = detector.findFaces(img)
 
     if bboxs:
