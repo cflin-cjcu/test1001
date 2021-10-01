@@ -14,7 +14,7 @@ class FaceDetector:
     library.
     """
 
-    def __init__(self, minDetectionCon=0.5):
+    def __init__(self, minDetectionCon=0.5, model_selection=0):
         """
         :param minDetectionCon: Minimum Detection Confidence Threshold
         """
@@ -23,7 +23,7 @@ class FaceDetector:
         self.mpFaceDetection = mp.solutions.face_detection
         self.mpDraw = mp.solutions.drawing_utils
         self.faceDetection = self.mpFaceDetection.FaceDetection(
-            self.minDetectionCon)
+            self.minDetectionCon, model_selection)
 
     def findFaces(self, img, draw=True):
         """
@@ -41,7 +41,7 @@ class FaceDetector:
             for id, detection in enumerate(self.results.detections):
                 print(detection)
                 bboxC = detection.location_data.relative_bounding_box
-                k1 = detection.location_data.relative_keypoints[0]
+                k1 = detection.location_data.relative_keypoints[2]
                 ih, iw, ic = img.shape
                 bbox = int(bboxC.xmin * iw), int(bboxC.ymin * ih), \
                     int(bboxC.width * iw), int(bboxC.height * ih)
