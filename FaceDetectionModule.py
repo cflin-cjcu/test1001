@@ -6,6 +6,7 @@ Website: https://www.computervision.zone/
 
 import cv2
 import mediapipe as mp
+import cvzone.Utils
 
 
 class FaceDetector:
@@ -33,7 +34,8 @@ class FaceDetector:
         :return: Image with or without drawings.
                  Bounding Box list.
         """
-
+        heartimg = cv2.imread('./image/heart.png', cv2.IMREAD_UNCHANGED)
+        heartimg = cv2.resize(heartimg, (0, 0), None, 1, 1)
         imgRGB = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
         self.results = self.faceDetection.process(imgRGB)
         bboxs = []
@@ -41,11 +43,11 @@ class FaceDetector:
             for id, detection in enumerate(self.results.detections):
                 print(detection)
                 bboxC = detection.location_data.relative_bounding_box
-                k1 = detection.location_data.relative_keypoints[2]
+                k1 = detection.location_data.relative_keypoints[0]
                 ih, iw, ic = img.shape
                 bbox = int(bboxC.xmin * iw), int(bboxC.ymin * ih), \
                     int(bboxC.width * iw), int(bboxC.height * ih)
-                kp1 = int(k1.x * iw), int(k1.y * ih)
+                kp1 = [int(k1.x * iw), int(k1.y * ih)]
                 cx, cy = bbox[0] + (bbox[2] // 2), \
                     bbox[1] + (bbox[3] // 2)
                 bboxInfo = {"id": id, "bbox": bbox,
@@ -53,7 +55,8 @@ class FaceDetector:
                 bboxs.append(bboxInfo)
                 if draw:
                     img = cv2.rectangle(img, bbox, (255, 255, 0), 2)
-                    img = cv2.circle(img, kp1, 5, (255, 255, 0), cv2.FILLED)
+                    # img = cv2.circle(img, kp1, 5, (255, 255, 0), cv2.FILLED)
+                    img = cvzone.overlayPNG(img, heartimg, kp1)
                     cv2.putText(img, f'{int(detection.score[0] * 100)}%',
                                 (bbox[0], bbox[1] - 20), cv2.FONT_HERSHEY_PLAIN,
                                 2, (255, 0, 255), 2)
